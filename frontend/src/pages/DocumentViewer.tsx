@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
-import { useParams, useSearchParams, Link, useNavigate } from 'react-router-dom';
+import { useParams, useSearchParams, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { learningAPI } from '../services/api';
-import { Document, ChatMessage } from '../types/learning';
+import { Document } from '../types/learning';
 import AIChat from '../components/learning/AIChat';
 import DocumentSummary from '../components/learning/DocumentSummary';
 import ConceptExplainer from '../components/learning/ConceptExplainer';
@@ -11,7 +11,6 @@ import { dummyDocuments } from '../utils/dummyData';
 const DocumentViewer = () => {
   const { documentId } = useParams<{ documentId: string }>();
   const [searchParams] = useSearchParams();
-  const navigate = useNavigate();
   const { user, logout } = useAuth();
   const [document, setDocument] = useState<Document | null>(null);
   const [loading, setLoading] = useState(true);

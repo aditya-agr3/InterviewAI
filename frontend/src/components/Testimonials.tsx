@@ -1,16 +1,6 @@
-import { useState, useEffect } from 'react';
-import { testimonials, Testimonial } from '../utils/dummyData';
+import { testimonials } from '../utils/dummyData';
 
 const Testimonials = () => {
-  const [currentIndex, setCurrentIndex] = useState(0);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % testimonials.length);
-    }, 5000);
-    return () => clearInterval(interval);
-  }, []);
-
   const renderStars = (rating: number) => {
     return Array.from({ length: 5 }).map((_, i) => (
       <svg

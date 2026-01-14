@@ -1,12 +1,11 @@
 import { useEffect, useState } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { learningAPI } from '../services/api';
 import { Quiz, QuizQuestion } from '../types/learning';
 
 const QuizPage = () => {
   const { quizId } = useParams<{ quizId: string }>();
-  const navigate = useNavigate();
   const { user, logout } = useAuth();
   const [quiz, setQuiz] = useState<Quiz | null>(null);
   const [loading, setLoading] = useState(true);

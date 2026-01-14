@@ -24,7 +24,7 @@ class BackendStatusManager {
     error: null,
   };
   private listeners: Set<(status: BackendStatus) => void> = new Set();
-  private checkInterval: NodeJS.Timeout | null = null;
+  private checkInterval: ReturnType<typeof setInterval> | null = null;
 
   async checkBackend(): Promise<boolean> {
     try {

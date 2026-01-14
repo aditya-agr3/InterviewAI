@@ -9,7 +9,6 @@ const Dashboard = () => {
   const { user, logout } = useAuth();
   const [sessions, setSessions] = useState<{ sessions: any[] }>({ sessions: [] });
   const [pinnedCount, setPinnedCount] = useState(0);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetchData();
@@ -27,7 +26,7 @@ const Dashboard = () => {
     } catch (error) {
       console.error('Failed to fetch data:', error);
     } finally {
-      setLoading(false);
+      // No loading state needed for this summary view
     }
   };
 

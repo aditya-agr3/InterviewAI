@@ -75,20 +75,25 @@ const DocumentsPage = () => {
     setUploading(true);
     setUploadProgress(0);
 
+    let progressInterval: ReturnType<typeof setInterval> | null = null;
     try {
       // Simulate upload progress
-      const progressInterval = setInterval(() => {
+      progressInterval = setInterval(() => {
         setUploadProgress((prev) => {
           if (prev >= 90) {
-            clearInterval(progressInterval);
+            if (progressInterval) {
+              clearInterval(progressInterval);
+            }
             return 90;
           }
           return prev + 10;
         });
       }, 200);
 
-      const response = await learningAPI.uploadDocument(file);
-      clearInterval(progressInterval);
+      await learningAPI.uploadDocument(file);
+      if (progressInterval) {
+        clearInterval(progressInterval);
+      }
       setUploadProgress(100);
 
       // Backend is working - refresh status and fetch real data
@@ -100,7 +105,9 @@ const DocumentsPage = () => {
         setUploadProgress(0);
       }, 500);
     } catch (error: any) {
-      clearInterval(progressInterval);
+      if (progressInterval) {
+        clearInterval(progressInterval);
+      }
       // If backend is not available, simulate successful upload with dummy data
       if (error.response?.status === 404 || error.response?.status === 500) {
         // Simulate adding a new document to the list
