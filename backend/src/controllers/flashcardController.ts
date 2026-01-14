@@ -2,7 +2,7 @@ import { Response } from 'express';
 import Flashcard from '../models/Flashcard';
 import Document from '../models/Document';
 import { AuthRequest } from '../middlewares/auth';
-import { generateFlashcards } from '../services/geminiService';
+import { generateFlashcards as generateFlashcardsAI } from '../services/geminiService';
 import { extractTextFromPDF } from '../utils/pdfExtractor';
 
 // Generate flashcards from a document
@@ -37,7 +37,7 @@ export const generateFlashcards = async (req: AuthRequest, res: Response): Promi
     // Generate flashcards using AI
     let generatedFlashcards: Array<{ front: string; back: string }>;
     try {
-      generatedFlashcards = await generateFlashcards(documentContent, 10);
+      generatedFlashcards = await generateFlashcardsAI(documentContent, 10);
     } catch (error: any) {
       console.error('Error generating flashcards:', error);
       res.status(500).json({ message: error.message || 'Failed to generate flashcards' });
