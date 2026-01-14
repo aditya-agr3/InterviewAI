@@ -23,6 +23,15 @@ A complete, production-ready MERN stack application that helps users prepare for
 - **Image Upload**: Upload and preview your profile photo in real-time
 - **Full CRUD Support**: Complete backend API integration with MongoDB
 
+### Learning Assistant
+- **PDF Upload & Management**: Upload, store, and manage study documents
+- **AI-Powered Chat**: Ask questions about your documents with context-aware AI responses
+- **AI Document Summary**: Generate concise summaries of entire documents
+- **AI Concept Explainer**: Get detailed explanations of specific topics
+- **Auto-Generated Flashcards**: Create flashcard sets automatically from document content
+- **AI Quiz Generator**: Generate custom multiple-choice quizzes
+- **Progress Tracking**: Monitor documents, flashcards, and quizzes with activity feed
+
 ## 🛠️ Tech Stack
 
 ### Frontend
@@ -42,6 +51,7 @@ A complete, production-ready MERN stack application that helps users prepare for
 - JWT Authentication
 - bcrypt for password hashing
 - Google Gemini API
+- pdf-parse for PDF text extraction
 
 ## 📁 Project Structure
 
@@ -94,8 +104,8 @@ interviewAI/
 
 1. **Clone the repository**
    ```bash
-   git clone <repository-url>
-   cd interviewAI
+   git clone https://github.com/aditya-agr3/InterviewAI.git
+   cd InterviewAI
    ```
 
 2. **Setup Backend**
@@ -121,6 +131,7 @@ PORT=5000
 MONGODB_URI=mongodb://localhost:27017/interviewai
 JWT_SECRET=your_super_secret_jwt_key_change_this_in_production_min_32_characters
 GEMINI_API_KEY=your_gemini_api_key_here
+FRONTEND_URL=http://localhost:3000
 ```
 
 **Notes:** 
@@ -184,6 +195,27 @@ VITE_API_URL=http://localhost:5000/api
 - `DELETE /api/resumes/:resumeId` - Delete a resume
 - `POST /api/resumes/:resumeId/upload-image` - Upload profile image
 
+### Learning Assistant
+- `POST /api/learning/documents` - Upload PDF document
+- `GET /api/learning/documents` - Get all documents
+- `GET /api/learning/documents/:documentId` - Get document details
+- `GET /api/learning/documents/:documentId/file` - Get PDF file
+- `DELETE /api/learning/documents/:documentId` - Delete document
+- `POST /api/learning/documents/:documentId/chat` - Send chat message
+- `GET /api/learning/documents/:documentId/chat` - Get chat history
+- `POST /api/learning/documents/:documentId/summary` - Generate summary
+- `POST /api/learning/documents/:documentId/explain` - Explain concept
+- `POST /api/learning/documents/:documentId/flashcards/generate` - Generate flashcards
+- `GET /api/learning/flashcards` - Get flashcards
+- `PATCH /api/learning/flashcards/:flashcardId/favorite` - Toggle favorite
+- `DELETE /api/learning/flashcards/:flashcardId` - Delete flashcard
+- `POST /api/learning/documents/:documentId/quizzes/generate` - Generate quiz
+- `GET /api/learning/quizzes` - Get quizzes
+- `GET /api/learning/quizzes/:quizId` - Get quiz details
+- `POST /api/learning/quizzes/:quizId/submit` - Submit quiz
+- `DELETE /api/learning/quizzes/:quizId` - Delete quiz
+- `GET /api/learning/progress` - Get progress stats
+
 ## 🎨 Design Theme
 
 The application uses a modern light theme with the following color palette:
@@ -236,6 +268,16 @@ The application uses a modern light theme with the following color palette:
    - Upload a profile photo
 5. **Preview**: See live preview as you type
 6. **Save & Download**: Save your resume and download as PDF
+
+### Learning Assistant
+1. **Upload Documents**: Upload PDF study materials
+2. **View Documents**: Read PDFs directly in the app
+3. **AI Chat**: Ask questions about document content
+4. **Generate Summary**: Get AI-powered document summaries
+5. **Explain Concepts**: Get detailed explanations of topics
+6. **Study Flashcards**: Review auto-generated flashcards
+7. **Take Quizzes**: Test your knowledge with AI-generated quizzes
+8. **Track Progress**: Monitor your learning journey
 
 ## 🏗️ Building for Production
 
