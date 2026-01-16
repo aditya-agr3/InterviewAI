@@ -14,7 +14,7 @@ export interface IQuiz extends Document {
   questions: IQuizQuestion[];
   score?: number;
   totalQuestions: number;
-  userAnswers?: Record<string, number>;
+  userAnswers?: Map<string, number>;
   completedAt?: Date;
   createdAt: Date;
   updatedAt: Date;

@@ -196,7 +196,7 @@ export const submitQuiz = async (req: AuthRequest, res: Response): Promise<void>
     const score = Math.round((correctCount / quiz.totalQuestions) * 100);
 
     // Update quiz
-    quiz.userAnswers = userAnswersMap as any;
+    quiz.userAnswers = userAnswersMap;
     quiz.score = score;
     quiz.completedAt = new Date();
     await quiz.save();
