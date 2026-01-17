@@ -4,6 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import { sessionAPI } from '../services/api';
 import StatsCard from '../components/StatsCard';
 import EngagementWidget from '../components/EngagementWidget';
+import CompanyMarquee from '../components/CompanyMarquee';
 
 const Dashboard = () => {
   const { user, logout } = useAuth();
@@ -155,6 +156,11 @@ const Dashboard = () => {
             streak={5}
             dailyGoal={{ completed: 3, total: 5 }}
           />
+        </div>
+
+        {/* Company Marquee */}
+        <div className="mb-8">
+          <CompanyMarquee />
         </div>
 
         {/* Quick Access to Main Features */}

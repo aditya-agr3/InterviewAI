@@ -67,4 +67,35 @@
   .animate-slide-down {
     animation: slide-down 0.3s ease-out;
   }
+
+  /* Horizontal marquee for company logos */
+  @keyframes marquee-scroll {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-50%);
+    }
+  }
+
+  .marquee-mask {
+    @apply overflow-hidden;
+    mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  }
+
+  .marquee-track {
+    @apply flex items-center gap-10 w-max;
+    animation: marquee-scroll 26s linear infinite;
+  }
+
+  .marquee-group {
+    @apply flex items-center gap-8 pr-8;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .marquee-track {
+      animation: none;
+    }
+  }
 }
