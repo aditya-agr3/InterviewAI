@@ -4,6 +4,7 @@ import { AuthProvider } from './context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
 import DemoModeBanner from './components/DemoModeBanner';
 import { backendStatusManager } from './utils/backendStatus';
+import SidebarLayout from './components/SidebarLayout';
 import Landing from './pages/Landing';
 import Login from './pages/Login';
 import Register from './pages/Register';
@@ -21,6 +22,7 @@ import FlashcardsPage from './pages/FlashcardsPage';
 import QuizzesPage from './pages/QuizzesPage';
 import QuizPage from './pages/QuizPage';
 import ProgressPage from './pages/ProgressPage';
+import OutreachGenerator from './pages/OutreachGenerator';
 
 function App() {
   // Initialize backend status checking when app loads
@@ -43,117 +45,28 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route
-            path="/dashboard"
             element={
               <ProtectedRoute>
-                <Dashboard />
+                <SidebarLayout />
               </ProtectedRoute>
             }
-          />
-          <Route
-            path="/interview-sessions"
-            element={
-              <ProtectedRoute>
-                <InterviewSessions />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/create-session"
-            element={
-              <ProtectedRoute>
-                <CreateSession />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/session/:sessionId"
-            element={
-              <ProtectedRoute>
-                <Session />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/pinned"
-            element={
-              <ProtectedRoute>
-                <PinnedQuestions />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/resumes"
-            element={
-              <ProtectedRoute>
-                <ResumeDashboard />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/resume/:resumeId"
-            element={
-              <ProtectedRoute>
-                <ResumeEditor />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/learning"
-            element={
-              <ProtectedRoute>
-                <LearningAssistant />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/learning/documents"
-            element={
-              <ProtectedRoute>
-                <DocumentsPage />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/learning/documents/:documentId"
-            element={
-              <ProtectedRoute>
-                <DocumentViewer />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/learning/flashcards"
-            element={
-              <ProtectedRoute>
-                <FlashcardsPage />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/learning/quizzes"
-            element={
-              <ProtectedRoute>
-                <QuizzesPage />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/learning/quizzes/:quizId"
-            element={
-              <ProtectedRoute>
-                <QuizPage />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/learning/progress"
-            element={
-              <ProtectedRoute>
-                <ProgressPage />
-              </ProtectedRoute>
-            }
-          />
+          >
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/interview-sessions" element={<InterviewSessions />} />
+            <Route path="/create-session" element={<CreateSession />} />
+            <Route path="/session/:sessionId" element={<Session />} />
+            <Route path="/pinned" element={<PinnedQuestions />} />
+            <Route path="/resumes" element={<ResumeDashboard />} />
+            <Route path="/resume/:resumeId" element={<ResumeEditor />} />
+            <Route path="/learning" element={<LearningAssistant />} />
+            <Route path="/learning/documents" element={<DocumentsPage />} />
+            <Route path="/learning/documents/:documentId" element={<DocumentViewer />} />
+            <Route path="/learning/flashcards" element={<FlashcardsPage />} />
+            <Route path="/learning/quizzes" element={<QuizzesPage />} />
+            <Route path="/learning/quizzes/:quizId" element={<QuizPage />} />
+            <Route path="/learning/progress" element={<ProgressPage />} />
+            <Route path="/outreach" element={<OutreachGenerator />} />
+          </Route>
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </Router>

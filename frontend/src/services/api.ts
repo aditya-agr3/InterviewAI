@@ -325,4 +325,43 @@ export const learningAPI = {
   },
 };
 
+// Outreach Generator APIs
+export const outreachAPI = {
+  generateMessages: async (payload: {
+    platform: string;
+    tone: string;
+    relationship: string;
+    length: string;
+    jobDescription: string;
+    resumeFile: File;
+    companyName?: string;
+    roleTitle?: string;
+    recruiterName?: string;
+    senderName?: string;
+  }) => {
+    const formData = new FormData();
+    formData.append('platform', payload.platform);
+    formData.append('tone', payload.tone);
+    formData.append('relationship', payload.relationship);
+    formData.append('length', payload.length);
+    formData.append('jobDescription', payload.jobDescription);
+    if (payload.companyName) formData.append('companyName', payload.companyName);
+    if (payload.roleTitle) formData.append('roleTitle', payload.roleTitle);
+    if (payload.recruiterName) formData.append('recruiterName', payload.recruiterName);
+    if (payload.senderName) formData.append('senderName', payload.senderName);
+    formData.append('resume', payload.resumeFile);
+
+    const response = await api.post<{ messages: string[] }>(
+      '/outreach/generate',
+      formData,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      }
+    );
+    return response.data;
+  },
+};
+
 export default api;

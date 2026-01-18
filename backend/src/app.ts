@@ -6,6 +6,7 @@ import authRoutes from './routes/authRoutes';
 import sessionRoutes from './routes/sessionRoutes';
 import resumeRoutes from './routes/resumeRoutes';
 import learningRoutes from './routes/learningRoutes';
+import outreachRoutes from './routes/outreachRoutes';
 
 dotenv.config();
 
@@ -45,6 +46,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/sessions', sessionRoutes);
 app.use('/api/resumes', resumeRoutes);
 app.use('/api/learning', learningRoutes);
+app.use('/api/outreach', outreachRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {

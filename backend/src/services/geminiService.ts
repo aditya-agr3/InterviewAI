@@ -825,3 +825,176 @@ Example format:
     throw new Error(`Failed to generate quiz questions: ${error?.message || 'Unknown error'}`);
   }
 };
+
+interface OutreachParams {
+  platform: string;
+  tone: string;
+  relationship: string;
+  length: string;
+  jobDescription: string;
+  resumeText: string;
+  companyName?: string;
+  roleTitle?: string;
+  recruiterName?: string;
+  senderName?: string;
+}
+
+const getLengthGuidance = (platform: string, length: string): string => {
+  const normalized = platform.toLowerCase();
+  const lengthKey = length.toLowerCase();
+
+  if (normalized.includes('text')) {
+    return lengthKey === 'short'
+      ? 'Keep it under 220 characters.'
+      : lengthKey === 'long'
+      ? 'Keep it under 320 characters.'
+      : 'Keep it under 260 characters.';
+  }
+
+  if (normalized.includes('linkedin')) {
+    return lengthKey === 'short'
+      ? 'Keep it 350-450 characters.'
+      : lengthKey === 'long'
+      ? 'Keep it 700-900 characters.'
+      : 'Keep it 500-650 characters.';
+  }
+
+  return lengthKey === 'short'
+    ? 'Keep it 120-160 words.'
+    : lengthKey === 'long'
+    ? 'Keep it 220-280 words.'
+    : 'Keep it 170-210 words.';
+};
+
+export const generateOutreachMessages = async ({
+  platform,
+  tone,
+  relationship,
+  length,
+  jobDescription,
+  resumeText,
+  companyName,
+  roleTitle,
+  recruiterName,
+  senderName,
+}: OutreachParams): Promise<string[]> => {
+  try {
+    const genAI = getGenAI();
+    let modelName = getAvailableModel();
+    let model = genAI.getGenerativeModel({ model: modelName });
+
+    const lengthGuidance = getLengthGuidance(platform, length);
+    const prompt = `You are a career coach writing outreach messages that feel human and specific.
+
+Platform: ${platform}
+Tone: ${tone}
+Relationship: ${relationship}
+Company: ${companyName || '[Company]'}
+Role: ${roleTitle || '[Role]'}
+Recruiter Name: ${recruiterName || '[Recruiter Name]'}
+Sender Name: ${senderName || '[Your Name]'}
+
+Job Description:
+${jobDescription.substring(0, 6000)}
+
+Resume:
+${resumeText.substring(0, 6000)}
+
+Requirements:
+- Write 3 distinct messages for the selected platform.
+- Highlight 1-2 relevant strengths from the resume that match the job description.
+- Be specific, concise, and natural. Avoid buzzword-heavy or overly formal language.
+- Do not sound AI-generated or generic. No phrases like "As an AI" or "I hope this message finds you well."
+- ${lengthGuidance}
+- If platform is Email, include a short subject line followed by the email body.
+- Use placeholders like [Recruiter Name], [Company], [Role] when missing.
+- Return ONLY a JSON array of strings, no extra text.
+
+Example:
+["Message 1...", "Message 2...", "Message 3..."]`;
+
+    try {
+      const result = await retryWithBackoff(async () => {
+        return await model.generateContent(prompt);
+      });
+      const response = await result.response;
+      const text = response.text().trim();
+      setWorkingModel(modelName);
+
+      const jsonMatch = text.match(/\[[\s\S]*\]/);
+      if (jsonMatch) {
+        const messages = JSON.parse(jsonMatch[0]);
+        if (Array.isArray(messages) && messages.length > 0) {
+          return messages.slice(0, 3).map((message: any) => String(message).trim());
+        }
+      }
+
+      return text
+        .split('\n')
+        .map((line) => line.trim())
+        .filter((line) => line.length > 0)
+        .slice(0, 3);
+    } catch (modelError: any) {
+      const errorMessage = modelError?.message || String(modelError) || '';
+      const isModelNotFound =
+        errorMessage.includes('404') ||
+        errorMessage.includes('not found') ||
+        errorMessage.includes('is not found for API version') ||
+        (errorMessage.toLowerCase().includes('model') && errorMessage.includes('404'));
+
+      if (isModelNotFound) {
+        console.log(`Model ${modelName} not available, trying alternatives...`);
+        const availableModels = await listAvailableModels(genAI);
+        let alternatives = ['gemini-1.5-pro', 'gemini-pro'];
+        if (availableModels.length > 0) {
+          const supportedModels = availableModels.filter((name: string) =>
+            !name.includes('embedding') && !name.includes('embed')
+          );
+          if (supportedModels.length > 0) {
+            alternatives = [...supportedModels, ...alternatives];
+            alternatives = [...new Set(alternatives)];
+          }
+        }
+
+        for (const altModel of alternatives) {
+          try {
+            console.log(`Trying model: ${altModel}...`);
+            model = genAI.getGenerativeModel({ model: altModel });
+            const result = await retryWithBackoff(async () => {
+              return await model.generateContent(prompt);
+            });
+            const response = await result.response;
+            const text = response.text().trim();
+            setWorkingModel(altModel);
+            console.log(`✓ Successfully using model: ${altModel}`);
+
+            const jsonMatch = text.match(/\[[\s\S]*\]/);
+            if (jsonMatch) {
+              const messages = JSON.parse(jsonMatch[0]);
+              if (Array.isArray(messages) && messages.length > 0) {
+                return messages.slice(0, 3).map((message: any) => String(message).trim());
+              }
+            }
+
+            return text
+              .split('\n')
+              .map((line) => line.trim())
+              .filter((line) => line.length > 0)
+              .slice(0, 3);
+          } catch (altError: any) {
+            const altErrorMessage = altError?.message || String(altError) || '';
+            console.log(`Model ${altModel} also failed: ${altErrorMessage.substring(0, 100)}`);
+            continue;
+          }
+        }
+
+        throw new Error(`None of the available Gemini models are accessible. Tried: ${modelName}, ${alternatives.join(', ')}`);
+      }
+
+      throw modelError;
+    }
+  } catch (error: any) {
+    console.error('Error generating outreach messages:', error);
+    throw new Error(`Failed to generate outreach messages: ${error?.message || 'Unknown error'}`);
+  }
+};

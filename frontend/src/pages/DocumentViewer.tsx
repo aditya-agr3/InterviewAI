@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { useParams, useSearchParams, Link } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
 import { learningAPI } from '../services/api';
 import { Document } from '../types/learning';
 import AIChat from '../components/learning/AIChat';
@@ -11,7 +10,6 @@ import { dummyDocuments } from '../utils/dummyData';
 const DocumentViewer = () => {
   const { documentId } = useParams<{ documentId: string }>();
   const [searchParams] = useSearchParams();
-  const { user, logout } = useAuth();
   const [document, setDocument] = useState<Document | null>(null);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<'viewer' | 'chat' | 'summary' | 'explain'>('viewer');
@@ -104,45 +102,6 @@ const DocumentViewer = () => {
 
   return (
     <div className="min-h-screen bg-bg">
-      {/* Header */}
-      <header className="bg-bg-card shadow-card sticky top-0 z-10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-6">
-              <Link to="/dashboard" className="text-2xl font-bold bg-gradient-to-r from-secondary to-primary bg-clip-text text-transparent">
-                InterviewAI
-              </Link>
-              <nav className="hidden md:flex items-center gap-4">
-                <Link to="/dashboard" className="text-text-body hover:text-text-heading transition-colors">
-                  Dashboard
-                </Link>
-                <Link to="/interview-sessions" className="text-text-body hover:text-text-heading transition-colors">
-                  Interview Practice
-                </Link>
-                <Link to="/resumes" className="text-text-body hover:text-text-heading transition-colors">
-                  Resume Builder
-                </Link>
-                <Link to="/learning" className="text-primary font-medium">
-                  Learning Assistant
-                </Link>
-              </nav>
-            </div>
-            <div className="flex items-center gap-4">
-              <Link to="/pinned" className="text-text-body hover:text-text-heading transition-colors flex items-center gap-1">
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
-                </svg>
-                <span className="hidden sm:inline">Pinned</span>
-              </Link>
-              <span className="text-text-muted hidden sm:inline">Welcome, {user?.name}</span>
-              <button onClick={logout} className="btn-secondary text-sm">
-                Logout
-              </button>
-            </div>
-          </div>
-        </div>
-      </header>
-
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Document Header */}
         <div className="mb-6">

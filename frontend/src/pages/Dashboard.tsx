@@ -7,7 +7,7 @@ import EngagementWidget from '../components/EngagementWidget';
 import CompanyMarquee from '../components/CompanyMarquee';
 
 const Dashboard = () => {
-  const { user, logout } = useAuth();
+  const { user } = useAuth();
   const [sessions, setSessions] = useState<{ sessions: any[] }>({ sessions: [] });
   const [pinnedCount, setPinnedCount] = useState(0);
 
@@ -45,47 +45,7 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-bg">
-      {/* Header */}
-      <header className="bg-bg-card shadow-card sticky top-0 z-10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-6">
-              <h1 className="text-2xl font-bold bg-gradient-to-r from-secondary to-primary bg-clip-text text-transparent">
-                InterviewAI
-              </h1>
-              <nav className="hidden md:flex items-center gap-4">
-                <Link to="/dashboard" className="text-primary font-medium">
-                  Dashboard
-                </Link>
-                <Link to="/interview-sessions" className="text-text-body hover:text-text-heading transition-colors">
-                  Interview Practice
-                </Link>
-                <Link to="/resumes" className="text-text-body hover:text-text-heading transition-colors">
-                  Resume Builder
-                </Link>
-                <Link to="/learning" className="text-text-body hover:text-text-heading transition-colors">
-                  Learning Assistant
-                </Link>
-              </nav>
-            </div>
-            <div className="flex items-center gap-4">
-              <Link to="/pinned" className="text-text-body hover:text-text-heading transition-colors flex items-center gap-1">
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
-                </svg>
-                <span className="hidden sm:inline">Pinned</span>
-              </Link>
-              <span className="text-text-muted hidden sm:inline">Welcome, {user?.name}</span>
-              <button onClick={logout} className="btn-secondary text-sm">
-                Logout
-              </button>
-            </div>
-          </div>
-        </div>
-      </header>
-
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div>
         {/* Welcome Header */}
         <div className="mb-8 p-6 bg-gradient-to-r from-purple-50 via-indigo-50 to-purple-50 rounded-card border border-purple-100">
           <div className="flex items-center gap-4">
@@ -164,7 +124,7 @@ const Dashboard = () => {
         </div>
 
         {/* Quick Access to Main Features */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           {/* Interview Practice Card */}
           <Link to="/interview-sessions" className="card bg-gradient-to-r from-purple-50 via-indigo-50 to-purple-50 border border-purple-100 hover:shadow-card-hover transition-all duration-200 group">
             <div className="flex items-center gap-4">
@@ -239,8 +199,32 @@ const Dashboard = () => {
               </div>
             </div>
           </Link>
+
+          {/* Outreach Generator Card */}
+          <Link to="/outreach" className="card bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-100 hover:shadow-card-hover transition-all duration-200 group">
+            <div className="flex items-center gap-4">
+              <div className="p-4 bg-gradient-to-br from-amber-500 to-orange-600 rounded-card group-hover:scale-110 transition-transform">
+                <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8m-18 8h18V8H3v8z" />
+                </svg>
+              </div>
+              <div className="flex-1">
+                <h3 className="text-xl font-semibold text-text-heading mb-1 group-hover:text-primary transition-colors">
+                  Outreach Generator
+                </h3>
+                <p className="text-text-body text-sm mb-3">
+                  Generate human recruiter messages for email, LinkedIn, or text
+                </p>
+                <span className="text-sm font-medium text-primary inline-flex items-center gap-1">
+                  Generate Messages
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </span>
+              </div>
+            </div>
+          </Link>
         </div>
-      </main>
     </div>
   );
 };
